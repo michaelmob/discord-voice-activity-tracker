@@ -1,0 +1,17 @@
+version: "3.9"
+services:
+  log-listener:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    entrypoint: [ "python", "main_log_listener.py" ]
+    volumes:
+      - .:/usr/src/app
+
+  announcer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    entrypoint: [ "python", "main_announcer.py" ]
+    volumes:
+      - .:/usr/src/app
