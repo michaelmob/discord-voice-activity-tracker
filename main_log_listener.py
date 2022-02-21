@@ -1,14 +1,9 @@
-import os
-import discord
+from dotenv import load_dotenv; load_dotenv()
+
+import os, discord
 from logs_db import get_db as get_logs_db, VoiceActivityLogs
-from dotenv import load_dotenv
 
 client = discord.Client()
-load_dotenv()
-
-logs_db = get_logs_db()
-logs_db.connect()
-logs_db.create_tables([VoiceActivityLogs])
 
 
 @client.event
@@ -35,5 +30,9 @@ async def on_voice_state_update(member, before, after):
         VoiceActivityLogs.start_log(member.id, after.channel.id)  # start
         print(f"{member.name} switched rooms")
 
+
+logs_db = get_logs_db()
+logs_db.connect()
+logs_db.create_tables([VoiceActivityLogs])
 
 client.run(os.getenv('DISCORD_TOKEN'))
