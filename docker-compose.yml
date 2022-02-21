@@ -5,6 +5,7 @@ services:
       context: .
       dockerfile: Dockerfile
     entrypoint: [ "python", "main_log_listener.py" ]
+    restart: unless-stopped
     volumes:
       - .:/usr/src/app
 
