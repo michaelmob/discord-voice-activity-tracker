@@ -1,11 +1,14 @@
-import os
 from peewee import *
+from os import getenv
 from datetime import datetime
 
-db = SqliteDatabase(os.getenv("LOGS_DATABASE"))
+db = SqliteDatabase(None)
 
 
-def get_db():
+def init_db(*args):
+    db.init(*args)
+    db.connect()
+    db.create_tables([VoiceActivityLogs])
     return db
 
 
@@ -18,14 +21,6 @@ class VoiceActivityLogs(Model):
 
     class Meta:
         database = db
-
-    def end_orphan_logs(member_id):
-        # attempt to find unleft log and end it
-        return (__class__
-                .update(left_at=datetime.now(), orphan=True)
-                .where(__class__.member_id == member_id,
-                       __class__.left_at == None)
-                .execute())
 
     def start_log(member_id, channel_id):
         # create VoiceActivityLogs database row with an empty left_at
@@ -43,4 +38,12 @@ class VoiceActivityLogs(Model):
                 .where(__class__.member_id == member_id)
                 .order_by(__class__.joined_at.desc())
                 .limit(1)
+                .execute())
+
+    def end_orphan_logs(member_id):
+        # attempt to find orphan log and end it
+        return (__class__
+                .update(left_at=datetime.now(), orphan=True)
+                .where(__class__.member_id == member_id,
+                       __class__.left_at == None)
                 .execute())

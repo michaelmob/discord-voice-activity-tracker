@@ -1,7 +1,10 @@
-from dotenv import load_dotenv; load_dotenv()
+import discord
+from os import getenv
+from dotenv import load_dotenv
+from database import init_db, VoiceActivityLogs
 
-import os, discord
-from logs_db import get_db as get_logs_db, VoiceActivityLogs
+load_dotenv()
+init_db(getenv("DATABASE"))
 
 client = discord.Client()
 
@@ -28,11 +31,7 @@ async def on_voice_state_update(member, before, after):
     elif before.channel is not None and after.channel is not None:
         VoiceActivityLogs.end_log(member.id, before.channel.id)  # end
         VoiceActivityLogs.start_log(member.id, after.channel.id)  # start
-        print(f"{member.name} switched rooms")
+        print(f"{member.name} switched channels")
 
 
-logs_db = get_logs_db()
-logs_db.connect()
-logs_db.create_tables([VoiceActivityLogs])
-
-client.run(os.getenv('DISCORD_TOKEN'))
+client.run(getenv('DISCORD_TOKEN'))

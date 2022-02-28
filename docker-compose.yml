@@ -4,8 +4,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    entrypoint: [ "python", "main_logger.py" ]
-    restart: unless-stopped
+    entrypoint: [ "python", "src/main_logger.py" ]
+    #restart: unless-stopped
     volumes:
       - .:/usr/src/app
 
@@ -13,6 +13,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    entrypoint: [ "python", "main_announcer.py" ]
+    entrypoint: [ "python", "src/main_announcer.py" ]
     volumes:
       - .:/usr/src/app
