@@ -1,10 +1,10 @@
 version: "3.9"
 services:
-  log-listener:
+  logger:
     build:
       context: .
       dockerfile: Dockerfile
-    entrypoint: [ "python", "main_log_listener.py" ]
+    entrypoint: [ "python", "main_logger.py" ]
     restart: unless-stopped
     volumes:
       - .:/usr/src/app
