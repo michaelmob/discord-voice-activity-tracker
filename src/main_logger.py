@@ -1,12 +1,7 @@
-import discord
-from os import getenv
-from dotenv import load_dotenv
-from database import init_db, VoiceActivityLogs
+from __init__ import get_client, run_client
+from database import VoiceActivityLogs
 
-load_dotenv()
-init_db(getenv("DATABASE"))
-
-client = discord.Client()
+client = get_client()
 
 
 @client.event
@@ -34,4 +29,4 @@ async def on_voice_state_update(member, before, after):
         print(f"{member.name} switched channels")
 
 
-client.run(getenv('DISCORD_TOKEN'))
+run_client()
